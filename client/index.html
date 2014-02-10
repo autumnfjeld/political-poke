@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>NYTimes Query</title>
+	  <!-- external javascript -->
+    <script src="bower_components/jquery/jquery.min.js"></script>
+    <script src='https://cdn.firebase.com/v0/firebase.js'></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
+    <!--<script src="bower_components/momentjs/moment.js"></script> 
+    
+    <!-- internal javascript -->
+
+	</head>
+
+
+	<body>
+		<script>
+		$(document).ready(function(){
+
+			// Instantiate Firebase 
+	  	var candiates = new Firebase("https://scorching-fire-2722.firebaseio.com/");
+	  	candiates.set({name: "Barack Obama"})
+
+			var apiKeyNYTCF = "a1b62a8e2df5aa511b20dd4f1e5a8bc4:11:55466580";
+
+			// http://api.nytimes.com/svc/elections/us/v3/finances/2012/candidates/search.json?query=paul&api-key=a1b62a8e2df5aa511b20dd4f1e5a8bc4:11:55466580
+			
+			var name = "paul";  //Ayotte
+
+			urlCandidate = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/candidates/search.json?query=" + 
+					name + "&api-key=" + apiKeyNYTCF;
+
+			var getData = function(){
+				$.ajax({
+					url : urlCandidate,
+					type : 'GET',
+					dataType: "jsonp",  //for 
+					//contentType: 'application/jsonp',   //using this results in OPTIONS preflight check
+					success: function(data){
+						console.log('Success: got data');
+						processData(data.results);
+					},
+					error: function(data){
+						console.log("So sad. Failed to get NYT data");
+					}
+				});
+			};
+
+			var processData = function(data){
+				console.log('in process data', data);
+				_.each(data, function(item){
+					$candidateInfo = $("<div>");
+					var string =  item.candidate.name + " " + item.candidate.id;
+					console.log("Each item: ", string);
+				});
+				// here probably want to start storing candidate id & name
+			};
+
+			var displayData = function(something){
+			};
+
+			getData();
+
+		}); // end of doc ready
+
+		</script>
+
+  	<div id='container'>
+  	</div>
+
+	</body>
+</html>
+
+
+
+
+
