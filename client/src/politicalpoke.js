@@ -1,26 +1,39 @@
 /**
- * Political Poke: a NYTimes Query app & more.....
+ * Political Poke: a NYTimes Query apolPoke & more.....
  * My first experiment grabbing data from an api
  */
 
-angular.module("PoliticalPoke", ['PoliticalPoke.controllers']);
+var polPoke = angular.module("PoliticalPoke", []);
 
-angular.module('PoliticalPoke.controllers', [])
-.controller('GetDataController', function($scope, $http){
-	var apiKeyNYTCF = "a1b62a8e2df5aa511b20dd4f1e5a8bc4:11:55466580";
-	
-	//callback lookup for candidate campaign finance details
-	var verifyCandidate = function(data){
+polPoke.run(function($rootScope){
+	$rootScope.verifyCandidate = function(data){
 		_.each(data, function(item){
-			console.log('in verfiy', item.candidate);
 			var returnedName = item.candidate.name.toLowerCase();
-			if (returnedName === $scope.lastname+ ", " + $scope.firstname){
+			console.log('in verify returnedNam', returnedName);
+			if (returnedName === $scope.lastname.toLowerCase() + ", " + $scope.firstname.toLowerCase()){
 				console.log('we have a match');
+				//TODO: store data to database
 			}
 		});
 	};
+});
 
-	// name Query will return candidate id
+polPoke.controller('GetDataController', function($scope, $http){
+	var apiKeyNYTCF = "a1b62a8e2df5aa511b20dd4f1e5a8bc4:11:55466580";
+	
+	//var 
+	//callback lookup for candidate campaign finance details
+	// var verifyCandidate = function(data){
+	// 	_.each(data, function(item){
+	// 		var returnedName = item.candidate.name.toLowerCase();
+	// 		console.log('in verfiy returnedNam', returnedName);
+	// 		if (returnedName === $scope.lastname.toLowerCase() + ", " + $scope.firstname.toLowerCase()){
+	// 			console.log('we have a match');
+	// 			//store data to database
+	// 		}
+	// 	});
+	// };
+	// get candidate name from user input and query api for candidate id
 	$scope.nameQuery = function(){
 		console.log('nameQuery function accessed', $scope.name);
 		$scope.firstname = $scope.name.split(" ")[0];
@@ -40,7 +53,7 @@ angular.module('PoliticalPoke.controllers', [])
 			console.log('got the data', obj.data.results);
 			//if data is returned process it. maybe this can be handled with promises?
 			if (obj.data.results.length !== 0){
-				verifyCandidate(obj.data.results);
+				$scope.verifyCandidate(obj.data.results);
 			}else{
 				$scope.message = "Sorry, we couldn't find <b>" + $scope.name + "</b> in our database"; 
 			}
@@ -52,6 +65,16 @@ angular.module('PoliticalPoke.controllers', [])
 	};
 	console.log('just checking scope', $scope);
 });
+
+
+polPoke.controller('ShowDataController', function($scope){
+	$scope.canCampaignMoney = [];
+	$scope.loadCanCampaignMoney = function(){
+		//$scope.candidates = 
+	};
+});
+
+
 
 // each time name is called will need to get id for next data extraction,
 // store name, id, and other info in db table for later extraction
