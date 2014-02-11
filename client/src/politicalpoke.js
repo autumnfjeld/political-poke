@@ -5,24 +5,38 @@
 
 var polPoke = angular.module("PoliticalPoke", []);
 
-polPoke.run(function($rootScope){
-	$rootScope.verifyCandidate = function(data){
-		_.each(data, function(item){
+// Service to handle initial candidate name & id info
+polPoke.service('BasicInfoService', function(){
+	this.candidateStore = [];
+
+	//callback lookup for candidate campaign finance details
+	// WIERD: variables defined above are not available with a foreach 
+	this.verifyCandidate = function(fn, ln, data){
+		//angular.forEach(data, function(item){
+		for (var i = 0; i < data.length; i ++){
+		 	var item = data[i];
 			var returnedName = item.candidate.name.toLowerCase();
-			console.log('in verify returnedNam', returnedName);
-			if (returnedName === $scope.lastname.toLowerCase() + ", " + $scope.firstname.toLowerCase()){
-				console.log('we have a match');
-				//TODO: store data to database
+			// add all incoming data to candidateStore
+			var obj = {};
+			obj.firstname = returnedName.split(", ")[1];
+			obj.lastname  = returnedName.split(",")[0];
+			obj.id = item.candidate.id;
+			this.candidateStore.push(obj);
+			if (returnedName === ln + ", " + fn){
+				console.log('we have a match', returnedName);
+				//store data to database
 			}
-		});
-	};
+		}
+		console.log('this data', this.candidateStore);	
+	};	
 });
 
-polPoke.controller('GetDataController', function($scope, $http){
+
+polPoke.controller('GetDataController', function($scope, $http, BasicInfoService){
 	var apiKeyNYTCF = "a1b62a8e2df5aa511b20dd4f1e5a8bc4:11:55466580";
+	console.log('checking global variable', BasicInfoService.firstname)
 	
-	//var 
-	//callback lookup for candidate campaign finance details
+	// //callback lookup for candidate campaign finance details
 	// var verifyCandidate = function(data){
 	// 	_.each(data, function(item){
 	// 		var returnedName = item.candidate.name.toLowerCase();
@@ -33,27 +47,31 @@ polPoke.controller('GetDataController', function($scope, $http){
 	// 		}
 	// 	});
 	// };
+
 	// get candidate name from user input and query api for candidate id
 	$scope.nameQuery = function(){
 		console.log('nameQuery function accessed', $scope.name);
-		$scope.firstname = $scope.name.split(" ")[0];
-		$scope.lastname = $scope.name.split(" ")[1];
+		//BasicInfoService.inputname = $scope.name;
+		var queryFN = $scope.name.split(" ")[0];
+		var queryLN = $scope.name.split(" ")[1];
+		console.log('BasicInfoService', BasicInfoService.lastname);
+		// $scope.firstname = $scope.name.split(" ")[0];
+		// $scope.lastname = $scope.name.split(" ")[1];
+		
 		console.log( $scope.firstname, $scope.lastname);
 		var year = "2012";
 		var apikey = "&api-key=" + apiKeyNYTCF;
 		// In angular, must have callback specified directly in string
 		var url = "http://api.nytimes.com/svc/elections/us/v3/finances/" +
 				year + "/candidates/search.json?query=" 
-				+ $scope.lastname + apikey + '&callback=JSON_CALLBACK';
-				console.log(url);
+				+ queryLN + apikey + '&callback=JSON_CALLBACK';
 
 		// use $http.jsonp !!!
 		return $http.jsonp(url)
 		.then(function(obj){
 			console.log('got the data', obj.data.results);
-			//if data is returned process it. maybe this can be handled with promises?
 			if (obj.data.results.length !== 0){
-				$scope.verifyCandidate(obj.data.results);
+				BasicInfoService.verifyCandidate(queryFN, queryLN, obj.data.results);
 			}else{
 				$scope.message = "Sorry, we couldn't find <b>" + $scope.name + "</b> in our database"; 
 			}
@@ -63,11 +81,10 @@ polPoke.controller('GetDataController', function($scope, $http){
 			console.log("REEEE-JEC-TION")
 		});
 	};
-	console.log('just checking scope', $scope);
 });
 
-
-polPoke.controller('ShowDataController', function($scope){
+polPoke.controller('ShowDataController', function($scope, BasicInfoService){
+	$scope.firstname = BasicInfoService.firstname;
 	$scope.canCampaignMoney = [];
 	$scope.loadCanCampaignMoney = function(){
 		//$scope.candidates = 
