@@ -16,7 +16,7 @@
 
 		<!-- Create overhead view :		Create links control  -->
 		<header>
-			<h2>Poke your political</hr>
+			<h2>Political Poke</hr>
 		</header>
 
 		<div ng-controller="GetDataController">
@@ -24,10 +24,12 @@
 			<p> Find financial data for this politician.
 			<div>
 				<form id="formData" ng-submit="nameQuery()">
-					Name <input type="text" ng-model="name" placeholder="Last name">
+					<span ng-class = "inputbox">
+						Name <input type="text" ng-model="name" placeholder="Ex: John McCain, Barack Obama">
+					</span>
 				</form>
-				{{ name }}
 			</div>
+			<p ng-class = "bold"> 	{{ message }} </p>
 		<!-- Display returned data -->
 			<div>
 			</div>
