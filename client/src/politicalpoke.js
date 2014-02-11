@@ -6,7 +6,7 @@
 var polPoke = angular.module("PoliticalPoke", []);
 
 // Service to handle initial candidate name & id info
-polPoke.service('BasicInfoService', function(){
+polPoke.service('BasicInfoService', function($http){
 	this.candidateStore = [];
 
 	//callback lookup for candidate campaign finance details
@@ -21,46 +21,44 @@ polPoke.service('BasicInfoService', function(){
 			obj.firstname = returnedName.split(", ")[1];
 			obj.lastname  = returnedName.split(",")[0];
 			obj.id = item.candidate.id;
+			obj.campaignFinance = {};  //to be filled with subsequent query data
 			this.candidateStore.push(obj);
 			if (returnedName === ln + ", " + fn){
-				console.log('we have a match', returnedName);
-				//store data to database
+				console.log('we have a match', returnedName, obj.id);
+				this.getCandCampFin(obj.id);
 			}
 		}
-		console.log('this data', this.candidateStore);	
-	};	
+	};
+
+	this.getCandCampFin = function(candID){
+		var apiKeyNYTCFin = "a1b62a8e2df5aa511b20dd4f1e5a8bc4:11:55466580";
+		var apikey = "&api-key=" + apiKeyNYTCFin;
+		var year = "2012";
+		var url = "http://api.nytimes.com/svc/elections/us/v3/finances/" +
+				year + "/candidates/" + candID + ".json?" + apikey + '&callback=JSON_CALLBACK';
+		
+		return $http.jsonp(url)
+		.then(function(obj){
+			console.log("Got campaignFinance data", obj.data.results)
+		})
+		.catch(function(e){
+			throw e;
+			console.log("REEEE-JEC-TION")
+		});
+	};
+
 });
 
 
 polPoke.controller('GetDataController', function($scope, $http, BasicInfoService){
-	var apiKeyNYTCF = "a1b62a8e2df5aa511b20dd4f1e5a8bc4:11:55466580";
-	console.log('checking global variable', BasicInfoService.firstname)
-	
-	// //callback lookup for candidate campaign finance details
-	// var verifyCandidate = function(data){
-	// 	_.each(data, function(item){
-	// 		var returnedName = item.candidate.name.toLowerCase();
-	// 		console.log('in verfiy returnedNam', returnedName);
-	// 		if (returnedName === $scope.lastname.toLowerCase() + ", " + $scope.firstname.toLowerCase()){
-	// 			console.log('we have a match');
-	// 			//store data to database
-	// 		}
-	// 	});
-	// };
+	var apiKeyNYTCand = "a1b62a8e2df5aa511b20dd4f1e5a8bc4:11:55466580";
 
 	// get candidate name from user input and query api for candidate id
 	$scope.nameQuery = function(){
-		console.log('nameQuery function accessed', $scope.name);
-		//BasicInfoService.inputname = $scope.name;
 		var queryFN = $scope.name.split(" ")[0];
 		var queryLN = $scope.name.split(" ")[1];
-		console.log('BasicInfoService', BasicInfoService.lastname);
-		// $scope.firstname = $scope.name.split(" ")[0];
-		// $scope.lastname = $scope.name.split(" ")[1];
-		
-		console.log( $scope.firstname, $scope.lastname);
 		var year = "2012";
-		var apikey = "&api-key=" + apiKeyNYTCF;
+		var apikey = "&api-key=" + apiKeyNYTCand;
 		// In angular, must have callback specified directly in string
 		var url = "http://api.nytimes.com/svc/elections/us/v3/finances/" +
 				year + "/candidates/search.json?query=" 
