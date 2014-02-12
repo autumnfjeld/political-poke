@@ -92,16 +92,12 @@ polPoke.service('BasicInfoService', function($http){
 polPoke.controller('GetDataController', function($scope, $http, BasicInfoService){
 	$scope.displayResults = function(){
 		console.log('current', BasicInfoService.current.campaignFinance.party);
-
 		$scope.party = BasicInfoService.current.campaignFinance.party;
-		$scope.state = BasicInfoService.current.campaignFinance.state;
-		console.log($scope.party);
-// total_contributions: 549594250.46
-// total_disbursements: 737505368.05
-// total_from_individuals: 549580640.18
-// total_from_pacs: 0
-// total_receipts: 738503770.41
-// total_refunds: 8979896.3
+		$scope.state = BasicInfoService.current.campaignFinance.mailing_state;
+		$scope.total_contributions = accounting.formatMoney(BasicInfoService.current.campaignFinance.total_contributions);
+		$scope.total_disbursements = accounting.formatMoney(BasicInfoService.current.campaignFinance.total_disbursements, 0);
+		$scope.from_individuals = accounting.formatMoney(BasicInfoService.current.campaignFinance.total_from_individuals, 0);
+		$scope.from_pacs = accounting.formatMoney(BasicInfoService.current.campaignFinance.total_from_pacs, 0);
 	};
 
 	$scope.nameQuery = function(){

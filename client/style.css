@@ -1,6 +1,72 @@
 body {
-  background-color: #4D8742;
-  margin: 0;
-  margin-top: 10px;
+  background-color: #8A3B3B; //*4D8742*/;
+  margin: 0 auto;
   font-family: arial, sans-serif;
+/*  border:2px solid;
+	border-radius:3px;*/
 }
+
+header {
+	padding-left: 100px;
+}
+
+h1 {
+	width: 80%;
+}
+
+p1 {
+	font-size: 16px;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.maincontainer {
+	 background-color: #49629E;
+	 min-height: 600px;
+	 width: 80%;
+	 margin: 0 auto;
+	 padding: 20px;
+}
+
+.inputbox {
+	width: 360px;
+	height: 80 px;
+  display: block;
+  font-size: 16px;
+  padding: 5px;
+  margin-bottom: 5px;
+  border:2px none;
+  border-radius: 3px;
+}
+
+form input[type=text] {
+  width: 360px;
+  height: 40px;
+  display: block;
+  font-size: 20px;
+  padding: 5px;
+  margin-bottom: 5px;
+  border:2px none;
+  border-radius: 3px;
+}
+
+.queriedData{
+	font-size: 18;
+	padding-left: 20px;
+}
+
+table{
+	font-size: 18px;
+}
+tr {
+	height: 28px;
+}
+td {
+	width: 200px;
+}
+
+
+
+

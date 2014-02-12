@@ -2,12 +2,6 @@
 <html>
 	<head>
 		<title>Political Poke</title>
-    <script src="bower_components/jquery/jquery.min.js"></script>
-    <!--<script src='https://cdn.firebase.com/v0/firebase.js'></script> -->
-    <script src="bower_components/underscore/underscore-min.js"></script>
-    <script src="bower_components/angular/angular.js"></script> 
-    
-    <script src="src/politicalpoke.js"></script>    
     <link rel="stylesheet" type="css/text" href="style.css">
 
 	</head>
@@ -16,24 +10,62 @@
 
 		<!-- Create overhead view :		Create links control  -->
 		<header>
-			<h2>Political Poke</hr>
+			<h1>Political Poke</h1>
 		</header>
 
-		<div ng-controller="GetDataController">
+		<div class="maincontainer" ng-controller="GetDataController">
 			<!-- Get user input -->
-			<p> Find financial data for this politician.
+			<h2> Find financial data for a politician. </h2>
+
 			<div>
 				<form id="formData" ng-submit="nameQuery()">
 					<span ng-class = "inputbox">
-						Name <input type="text" ng-model="name" placeholder="Ex: John McCain, Barack Obama">
+						<input type="text" ng-model="name" placeholder="Ex: John McCain, Barack Obama">
 					</span>
 				</form>
 			</div>
+			<p1>Results returned for 2012 election year cycle.</p1>
+			<br>
 			<p ng-class = "bold"> 	{{ message }} </p>
 		<!-- Display returned data -->
-			<div>
+			<div class = "queriedData">
+				 <table>
+            <tr>
+              <td>Name</td>
+              <td>{{ name }}</td>
+            </tr>
+             <tr>
+              <td>Party</td>
+              <td>{{ party }}</td>
+            </tr>
+               <tr>
+              <td>State</td>
+              <td>{{ state }}</td>
+            </tr>
+            <tr>
+              <td>Total Contributions</td>
+              <td>{{ total_contributions }}</td>
+            </tr>
+            <tr>
+              <td>From Individuals</td>
+              <td>{{ from_individuals }}</td>
+            </tr>
+             <tr>
+              <td>From PACs</td>
+              <td>{{ from_pacs }}</td>
+            </tr>
+         </table>
 			</div>
+
 		</div>
 
+		<!-- Scripts go last to allow DOM loading -->
+    <script src="bower_components/jquery/jquery.min.js"></script>
+    <!--<script src='https://cdn.firebase.com/v0/firebase.js'></script> -->
+    <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="bower_components/angular/angular.js"></script> 
+    
+    <script src="src/politicalpoke.js"></script>    
+    <script src="src/accounting.js"></script>    
 	</body>
 	</html>
