@@ -15,7 +15,8 @@ h1 {
 }
 
 p1 {
-	font-size: 16px;
+	font-size: 18px;
+	padding-top: 15px;
 }
 
 .bold {
@@ -27,7 +28,7 @@ p1 {
 	 min-height: 600px;
 	 width: 80%;
 	 margin: 0 auto;
-	 padding: 20px;
+	 padding: 30px;
 }
 
 .inputbox {
@@ -54,7 +55,7 @@ form input[type=text] {
 
 .queriedData{
 	font-size: 18;
-	padding-left: 20px;
+	padding-left: 30px;
 }
 
 table{

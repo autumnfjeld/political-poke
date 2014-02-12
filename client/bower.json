@@ -1,22 +1,8 @@
 {
-  "name": "politicalpoke",
-  "version": "0.0.0",
-  "homepage": "https://github.com/autumnfjeld/political-poke",
-  "authors": [
-    "Autumn Fjeld <autumn@nmutua.com>"
-  ],
-  "description": "First forray into getting data from external api",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
+  "name": "political-poke",
+  "version": "0.0.1",
+  "private": true,
   "dependencies": {
-    "jquery": "~2.0.3",
-    "angular": "~1.2.12",
-    "underscore": "~1.5.2",
-    "momentjs": "~2.5.0"
+    "express": "3.x"
   }
 }
