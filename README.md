@@ -1,4 +1,3 @@
-
 Political Poke
 ==============
 
